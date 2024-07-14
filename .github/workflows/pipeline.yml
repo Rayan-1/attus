@@ -31,3 +31,6 @@ jobs:
       - name: Build and Deploy with Docker Compose
         run: |
           docker-compose up --build -d
+          # Verifica os contêineres em execução e as portas expostas
+          docker-compose ps
+
