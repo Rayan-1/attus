@@ -7,38 +7,76 @@ on:
       - develop
 
 jobs:
-  build-and-test:
+  build-and-test-back:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build Docker image
-        run: docker build -t myapp .
-
-      - name: Run basic tests
-        run: docker run myapp npm test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-and-test
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Deploy application
-        run: docker-compose up -d
-
-      - name: Run integration tests
+      - name: Build Docker image for teste-back
         run: |
-          # Example integration test script
-          docker-compose exec myapp npm run test:integration
+          cd teste-back
+          docker build -t myapp-back .
+      
+      - name: Run basic tests for teste-back
+        run: |
+          docker run myapp-back npm test
+
+  build-and-test-front:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image for teste-front
+        run: |
+          cd teste-front
+          docker build -t myapp-front .
+      
+      # Add any specific tests for frontend if applicable
+
+  deploy-back:
+    runs-on: ubuntu-latest
+    needs: build-and-test-back
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy teste-back application
+        run: |
+          cd teste-back
+          docker-compose up -d
+        # You can add additional steps like waiting for services to start
+
+      - name: Run integration tests for teste-back
+        run: |
+          cd teste-back
+          docker-compose exec myapp-back npm run test:integration
+
+  deploy-front:
+    runs-on: ubuntu-latest
+    needs: build-and-test-front
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy teste-front application
+        run: |
+          cd teste-front
+          docker-compose up -d
+        # Add any specific deployment steps
+
+      # Add steps for integration tests or other checks for frontend
 
   notify:
     runs-on: ubuntu-latest
-    needs: deploy
+    needs:
+      - deploy-back
+      - deploy-front
 
     steps:
       - name: Send notification
