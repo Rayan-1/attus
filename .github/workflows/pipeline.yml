@@ -28,10 +28,33 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
+      # Start ngrok tunnel for teste-back service
+      - name: Start ngrok tunnel for teste-back
+        run: |
+          curl -L https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -o ngrok.zip
+          unzip ngrok.zip
+          ./ngrok authtoken $NGROK_AUTH_TOKEN  # Replace $NGROK_AUTH_TOKEN with your ngrok auth token
+          ./ngrok http 8080 &  # Replace 8080 with the port where teste-back is running
+          sleep 2  # Wait for ngrok to start
+
+      # Start ngrok tunnel for teste-front service
+      - name: Start ngrok tunnel for teste-front
+        run: |
+          ./ngrok http 5000 &  # Replace 5000 with the port where teste-front is running
+          sleep 2  # Wait for ngrok to start
+
+      # Build and deploy with Docker Compose
       - name: Build and Deploy with Docker Compose
         run: |
           docker-compose up --build -d
           sleep 10  # Wait for services to fully start
           docker-compose ps  # List running containers after startup
           curl http://localhost:8080  # Example: Test connectivity to service
-          # Run other necessary commands like tests or deployments
+
+      # Display ngrok public URLs
+      - name: Display ngrok public URLs
+        run: |
+          curl http://localhost:4040/api/tunnels | jq '.tunnels[] | {name: .name, public_url: .public_url}'
+
+  # Other jobs like testing can be added here if needed
+
