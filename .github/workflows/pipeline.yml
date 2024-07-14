@@ -35,7 +35,7 @@ jobs:
 
       - name: Configure ngrok auth token
         run: |
-          ./ngrok authtoken BDZIXnhJt2HNWLXyQ5PM_qCaBq0W2sNFcCa0rfTZd
+          ./ngrok authtoken 2RDafr2vjKL3s7rSjKPZL5AYFtl_7Eqit88G2yje9wQLY3zw8
         working-directory: ${{ github.workspace }}
 
       - name: Build and Deploy with Docker Compose
