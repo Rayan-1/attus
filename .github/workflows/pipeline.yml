@@ -7,76 +7,45 @@ on:
       - develop
 
 jobs:
-  build-and-test-back:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build Docker image for teste-back
+      - name: Build and Test myapp-back
+        working-directory: teste-back  # Diretório onde está o Dockerfile do myapp-back
         run: |
-          cd teste-back
           docker build -t myapp-back .
-      
-      - name: Run basic tests for teste-back
+          docker run myapp-back mvn clean test  # Comando para executar testes do Maven
+
+      - name: Build and Test myapp-front
+        working-directory: teste-front  # Diretório onde está o Dockerfile do myapp-front
         run: |
-          docker run myapp-back npm test
-
-  build-and-test-front:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Build Docker image for teste-front
-        run: |
-          cd teste-front
           docker build -t myapp-front .
-      
-      # Add any specific tests for frontend if applicable
+          docker run myapp-front npm test  # Comando para executar testes do npm
 
-  deploy-back:
+  deploy:
     runs-on: ubuntu-latest
-    needs: build-and-test-back
+    needs: build-and-test
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Deploy teste-back application
+      - name: Deploy application
+        run: docker-compose up -d
+
+      - name: Run integration tests
         run: |
-          cd teste-back
-          docker-compose up -d
-        # You can add additional steps like waiting for services to start
-
-      - name: Run integration tests for teste-back
-        run: |
-          cd teste-back
-          docker-compose exec myapp-back npm run test:integration
-
-  deploy-front:
-    runs-on: ubuntu-latest
-    needs: build-and-test-front
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Deploy teste-front application
-        run: |
-          cd teste-front
-          docker-compose up -d
-        # Add any specific deployment steps
-
-      # Add steps for integration tests or other checks for frontend
+          # Exemplo de script de teste de integração
+          docker-compose exec myapp-back mvn verify
+          docker-compose exec myapp-front npm run test:integration
 
   notify:
     runs-on: ubuntu-latest
-    needs:
-      - deploy-back
-      - deploy-front
+    needs: deploy
 
     steps:
       - name: Send notification
