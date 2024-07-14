@@ -10,6 +10,17 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: dbname
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -33,17 +44,11 @@ jobs:
           docker-compose up --build -d
           sleep 10  # Wait for services to fully start
           docker-compose ps  # List running containers after startup
-          curl http://localhost:8080  # Example: Test connectivity to service
-          curl http://localhost:5000  # Example: Test connectivity to frontend service
 
-      - name: Capture Docker Compose Logs
+      - name: Test connectivity to teste-back service
         run: |
-          docker-compose logs > compose_logs.txt
-        continue-on-error: true
-        timeout-minutes: 5
+          curl -sSf http://localhost:8080 || exit 1
 
-      - name: Upload Logs as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: compose-logs
-          path: compose_logs.txt
+      - name: Test connectivity to teste-front service
+        run: |
+          curl -sSf http://localhost:5000 || exit 1
