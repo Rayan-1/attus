@@ -1,4 +1,4 @@
-name: Docker Compose Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -7,34 +7,39 @@ on:
       - develop
 
 jobs:
-  build-and-deploy:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-          sudo apt-get update
-          sudo apt-get install docker-ce docker-ce-cli containerd.io
+      - name: Build Docker image
+        run: docker build -t myapp .
 
-      - name: Install Docker Compose
-        run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
+      - name: Run basic tests
+        run: docker run myapp npm test
 
-      - name: Build and Deploy with Docker Compose
-        run: |
-          docker-compose up --build -d
-          sleep 100  # Wait for services to fully start
-          docker-compose ps  # List running containers after startup
-          curl http://localhost:8080  # Example: Test connectivity to service
-          # Run other necessary commands like tests or deployments
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-test
 
-      - name: Stop Docker containers
-        run: docker-compose down
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy application
+        run: docker-compose up -d
+
+      - name: Run integration tests
+        run: |
+          # Example integration test script
+          docker-compose exec myapp npm run test:integration
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: deploy
+
+    steps:
+      - name: Send notification
+        run: echo "Deployment completed successfully!"
