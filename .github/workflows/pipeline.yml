@@ -28,34 +28,22 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
-      - name: Download ngrok
-        run: |
-          curl -L https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -o ngrok.zip
-          unzip ngrok.zip
-
-      - name: Configure ngrok auth token
-        run: |
-          ./ngrok authtoken 2RDafr2vjKL3s7rSjKPZL5AYFtl_7Eqit88G2yje9wQLY3zw8
-        working-directory: ${{ github.workspace }}
-
       - name: Build and Deploy with Docker Compose
         run: |
           docker-compose up --build -d
           sleep 10  # Wait for services to fully start
           docker-compose ps  # List running containers after startup
           curl http://localhost:8080  # Example: Test connectivity to service
+          curl http://localhost:5000  # Example: Test connectivity to frontend service
 
-      - name: Start ngrok tunnel for teste-back
+      - name: Capture Docker Compose Logs
         run: |
-          ./ngrok http 8080 &
-        working-directory: ${{ github.workspace }}
+          docker-compose logs > compose_logs.txt
+        continue-on-error: true
+        timeout-minutes: 5
 
-      - name: Start ngrok tunnel for teste-front
-        run: |
-          ./ngrok http 5000 &
-        working-directory: ${{ github.workspace }}
-
-      - name: Display ngrok public URLs
-        run: |
-          curl http://localhost:4040/api/tunnels | jq '.tunnels[] | {name: .name, public_url: .public_url}'
-        working-directory: ${{ github.workspace }}
+      - name: Upload Logs as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: compose-logs
+          path: compose_logs.txt
