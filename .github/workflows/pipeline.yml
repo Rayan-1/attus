@@ -44,11 +44,12 @@ jobs:
           docker-compose up --build -d
           sleep 10  # Wait for services to fully start
           docker-compose ps  # List running containers after startup
-
+          
+      - name: Test connectivity to teste-front service
+        run: |
+          curl -sSf http://localhost:5000 || exit 1
       - name: Test connectivity to teste-back service
         run: |
           curl -sSf http://localhost:8080 || exit 1
 
-      - name: Test connectivity to teste-front service
-        run: |
-          curl -sSf http://localhost:5000 || exit 1
+      
