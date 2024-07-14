@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Docker Compose Pipeline
 
 on:
   push:
@@ -7,46 +7,31 @@ on:
       - develop
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Build and Test myapp-back
-        working-directory: teste-back  # Diretório onde está o Dockerfile do myapp-back
+      - name: Install Docker
         run: |
-          docker build -t myapp-back .
-          docker run myapp-back mvn clean test  # Comando para executar testes do Maven
+          sudo apt-get update
+          sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install docker-ce docker-ce-cli containerd.io
 
-      - name: Build and Test myapp-front
-        working-directory: teste-front  # Diretório onde está o Dockerfile do myapp-front
+      - name: Install Docker Compose
         run: |
-          docker build -t myapp-front .
-          docker run myapp-front npm test  # Comando para executar testes do npm
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-and-test
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Deploy application
-        run: docker-compose up -d
-
-      - name: Run integration tests
+      - name: Build and Deploy with Docker Compose
         run: |
-          # Exemplo de script de teste de integração
-          docker-compose exec myapp-back mvn verify
-          docker-compose exec myapp-front npm run test:integration
-
-  notify:
-    runs-on: ubuntu-latest
-    needs: deploy
-
-    steps:
-      - name: Send notification
-        run: echo "Deployment completed successfully!"
+          docker-compose up --build -d
+          sleep 10  # Wait for services to fully start
+          docker-compose ps  # List running containers after startup
+          curl http://localhost:8080  # Example: Test connectivity to service
+          # Run other necessary commands like tests or deployments
