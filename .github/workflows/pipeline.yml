@@ -31,5 +31,10 @@ jobs:
       - name: Build and Deploy with Docker Compose
         run: |
           docker-compose up --build -d
-          sleep 10  # Optional: Wait for services to fully start
+          sleep 100  # Wait for services to fully start
           docker-compose ps  # List running containers after startup
+          curl http://localhost:8080  # Example: Test connectivity to service
+          # Run other necessary commands like tests or deployments
+
+      - name: Stop Docker containers
+        run: docker-compose down
