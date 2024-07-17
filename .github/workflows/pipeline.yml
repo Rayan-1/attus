@@ -65,6 +65,8 @@ jobs:
       - name: SonarCloud Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+          PATH: $JAVA_HOME/bin:$PATH
         run: |
           ./sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
             -Dsonar.projectKey=Rayan-1_attus \
