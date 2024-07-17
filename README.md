@@ -43,37 +43,28 @@ attus/
 ![image](https://github.com/user-attachments/assets/424fe000-2c6e-4c77-86fe-c455f253b97f)
 
 
-### Diretório `teste-back`
+# Print 1
 
-- **Dockerfile**: Arquivo de configuração do Docker para o backend.
-- **HELP.md**: Arquivo de ajuda e documentação.
-- **mvnw** e **mvnw.cmd**: Scripts para executar o Maven Wrapper.
-- **out/**: Diretório de saída para compilação (geralmente ignorado pelo controle de versão).
-- **pom.xml**: Arquivo de configuração do Maven.
-- **src/**: Diretório de código-fonte.
-  - **main/**: Contém o código-fonte principal.
-    - **java/**: Código-fonte Java.
-    - **resources/**: Arquivos de recursos.
-  - **test/**: Contém os testes do projeto.
+- *FROM node:lts AS front-build ->* Usa a imagem oficial do Node.js na versão LTS como base. A etapa é nomeada front-build.
+WORKDIR /app -> Define o diretório /app como o diretório de trabalho dentro do contêiner.
+COPY package*.json ./ -> Copia os arquivos package.json e package-lock.json (ou yarn.lock, dependendo do gerenciador de pacotes) para o diretório de trabalho.
+RUN npm install -> Executa npm install para instalar todas as dependências listadas no package.json.
+COPY . . -> Copia todos os arquivos do projeto para o diretório de trabalho no contêiner.
+RUN npm run build -> Executa o comando de build definido no package.json, geralmente algo como npm run build, que compila os arquivos da aplicação para o diretório dist.
 
-### Diretório `teste-front`
+# Print 2
 
-- **Dockerfile**: Arquivo de configuração do Docker para o frontend.
-- **README.md**: Arquivo de documentação do projeto frontend.
-- **babel.config.js**: Arquivo de configuração do Babel.
-- **jsconfig.json**: Arquivo de configuração do JavaScript.
-- **node_modules/**: Diretório de dependências do Node.js (geralmente ignorado pelo controle de versão).
-- **package-lock.json**: Arquivo de bloqueio de dependências do Node.js.
-- **package.json**: Arquivo de configuração do projeto Node.js.
-- **public/**: Diretório de arquivos públicos.
-- **src/**: Diretório de código-fonte.
-  - **assets/**: Diretório de arquivos estáticos.
-  - **components/**: Diretório de componentes Vue.js.
-  - **views/**: Diretório de visualizações (views) Vue.js.
-  - **App.vue**: Componente principal da aplicação Vue.js.
-  - **main.js**: Arquivo de entrada principal da aplicação Vue.js.
+\*FROM node:lts-slim -> Usa a versão "slim" da imagem Node.js LTS como base, que é menor e mais eficiente.**
 
----
+*RUN npm install -g http-server -> Instala o http-server globalmente para servir a aplicação estática.**
+
+*WORKDIR /app -> Define o diretório /app ->  como o diretório de trabalho dentro do contêiner.**
+
+*COPY --from=front-build /app/dist /app -> Copia os arquivos construídos na primeira etapa (front-build) do diretório /app/dist para o diretório de trabalho /app na etapa final.**
+
+*EXPOSE 5000 -> Informa ao Docker que o contêiner escutará na porta 5000 em tempo de execução.**
+
+*CMD ["http-server", "-p", "5000"] -> Define o comando que será executado quando o contêiner iniciar: inicia o http-server na porta 5000.**
 
 
 
