@@ -61,7 +61,7 @@ jobs:
       - name: SonarCloud Scan
         shell: bash
         env:
-          SONAR_TOKEN: 5b12c1e6c167a3b49dace9ab39d05fa406d77190
+          SONAR_TOKEN: 76d855da2045b85bb6a8f21828d307dc20a5e4cc
           JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
           PATH: $JAVA_HOME/bin:$PATH
         run: |
