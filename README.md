@@ -32,3 +32,4 @@ attus/
         ├── views/
         ├── App.vue
         └── main.js
+![image](https://github.com/user-attachments/assets/dbf650dd-0022-47ec-a55e-687096e92a30)
