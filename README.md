@@ -53,11 +53,16 @@ RUN npm run build -> Executa o comando de build definido no package.json, geralm
 # Print 2
 
 *FROM node:lts-slim -> Usa a versão "slim" da imagem Node.js LTS como base, que é menor e mais eficiente.**
-- RUN npm install -g http-server -> Instala o http-server globalmente para servir a aplicação estática.
-WORKDIR /app -> Define o diretório /app ->  como o diretório de trabalho dentro do contêiner.
-COPY --from=front-build /app/dist /app -> Copia os arquivos construídos na primeira etapa (front-build) do diretório /app/dist para o diretório de trabalho /app na etapa final.
-EXPOSE 5000 -> Informa ao Docker que o contêiner escutará na porta 5000 em tempo de execução.
-CMD ["http-server", "-p", "5000"] -> Define o comando que será executado quando o contêiner iniciar: inicia o http-server na porta 5000.
+
+*RUN npm install -g http-server -> Instala o http-server globalmente para servir a aplicação estática.**
+
+*WORKDIR /app -> Define o diretório /app ->  como o diretório de trabalho dentro do contêiner.**
+
+*COPY --from=front-build /app/dist /app -> Copia os arquivos construídos na primeira etapa (front-build) do diretório /app/dist para o diretório de trabalho /app na etapa final.**
+
+*EXPOSE 5000 -> Informa ao Docker que o contêiner escutará na porta 5000 em tempo de execução.**
+
+*CMD ["http-server", "-p", "5000"] -> Define o comando que será executado quando o contêiner iniciar: inicia o http-server na porta 5000.**
 
 
 
