@@ -57,9 +57,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y openjdk-17-jdk
 
-      - name: Install sh
+      - name: Install dash
         run: |
-          sudo apt-get install -y posix
+          sudo apt-get install -y dash
 
       - name: Download SonarScanner
         run: |
