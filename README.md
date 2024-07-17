@@ -146,11 +146,32 @@ attus/
 - *PostgreSQL (postgres):* Um banco de dados PostgreSQL, escutando na porta 5432 e persistindo dados em um volume Docker.
 
 
+# Execução do Docker Compose
+- Certifique-se de que você está no diretório correto onde o arquivo docker-compose.yml está localizado. No seu caso, o diretório é ~/attus.
+- Execute o seguinte comando para iniciar os serviços definidos no docker-compose.yml: **docker-compose up --build** ou **docker-compose up -d**:
+-  **docker-compose up --build**: Este comando instrui o Docker Compose a construir (ou reconstruir) as imagens para os serviços definidos no arquivo docker-compose.yml, mesmo que elas já existam
+- ![image](https://github.com/user-attachments/assets/598a70c5-9a3e-4b74-8503-255adec5c018)
+- ![image](https://github.com/user-attachments/assets/659eae95-4f0d-45b8-a38e-7b637e6d108e)
 
+- **docker-compose up -d**: Este comando instrui o Docker Compose a iniciar os contêineres em segundo plano (detached mode), sem reconstruir as imagens.
+-   ![image](https://github.com/user-attachments/assets/c1ed1f76-089d-4736-8612-2ae1c8e70a7d)
 
+- Como foi mostrados nas imagens anteriores como podemos ver como contruir as imagens biuldar e executar os containes
 
+![image](https://github.com/user-attachments/assets/de5d6d76-77ea-458e-a669-701c4b24a311)
 
+**Agora vamos expor as portas dos containeres**
 
+- http://localhost:5000
+  ![image](https://github.com/user-attachments/assets/dc039629-26a4-435c-9d11-3227ad6a5450)
+- http://localhost:8080
+  ![image](https://github.com/user-attachments/assets/e63e1611-cf55-45e7-aed3-cdfbdf30b5cd)
+
+**Validação da Conexão do Front com o Back garantindo que os containeres estão se comunicando entre si dentro da mesma rede.
+- Usando o exemplo do usuario teste no codigo
+- **Email:** "devopsattus@.com"
+- **Senha:** "12136677"
+![image](https://github.com/user-attachments/assets/d08a602b-5e4f-494c-b35c-c6687ee45c1c)
 
 
 
