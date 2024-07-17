@@ -59,7 +59,7 @@ jobs:
           unzip sonar-scanner.zip
 
       - name: SonarCloud Scan
-        shell: bash
+        shell: /usr/bin/bash -e {0}
         env:
           SONAR_TOKEN: 76d855da2045b85bb6a8f21828d307dc20a5e4cc
           JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
