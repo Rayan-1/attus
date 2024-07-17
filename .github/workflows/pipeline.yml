@@ -59,7 +59,7 @@ jobs:
 
       - name: Install sh
         run: |
-          sudo apt-get install -y dash
+          sudo apt-get install -y posix
 
       - name: Download SonarScanner
         run: |
