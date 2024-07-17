@@ -27,11 +27,11 @@ jobs:
       - name: Install Docker
         run: |
           sudo apt-get update
-          sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
           sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
           sudo apt-get update
-          sudo apt-get install docker-ce docker-ce-cli containerd.io
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
       - name: Install Docker Compose
         run: |
@@ -39,34 +39,35 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
 
       - name: Build and Deploy with Docker Compose
-        continue-on-error: true
         run: |
           docker-compose up --build -d
           sleep 10  # Wait for services to fully start
           docker-compose ps  # List running containers after startup
 
       - name: Test connectivity to teste-front service
-        continue-on-error: true
         run: |
           curl -sSf http://localhost:5000 || exit 1
 
       - name: Test connectivity to teste-back service
-        continue-on-error: true
         run: |
           curl -sSf http://localhost:8080 || exit 1
 
-      - name: Install OpenJDK 11
+      - name: Install OpenJDK 17
         run: |
-          sudo apt-get install -y openjdk-11-jdk
+          sudo apt-get install -y openjdk-17-jdk
+
+      - name: Download SonarScanner
+        run: |
+          curl -sL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip -o sonar-scanner.zip
+          unzip sonar-scanner.zip
 
       - name: SonarCloud Scan
-        if: always()
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           ./sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-            -Dsonar.projectKey=Rayan-1_attus \
             -Dsonar.organization=rayan-1 \
-            -Dsonar.sources=./ \
+            -Dsonar.projectKey=Rayan-1_attus \
+            -Dsonar.sources=. \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=$SONAR_TOKEN
