@@ -33,3 +33,6 @@ attus/
         ├── App.vue
         └── main.js
 ![image](https://github.com/user-attachments/assets/dbf650dd-0022-47ec-a55e-687096e92a30)
+
+## Dockerfiles: Cada diretório (teste-back e teste-front) contém seu próprio Dockerfile que define como as imagens Docker para backend e frontend devem ser construídas.
+## Docker Compose: O arquivo docker-compose.yml na raiz do projeto define como os serviços (backend e frontend) serão coordenados e conectados, facilitando o desenvolvimento e a execução do projeto em ambiente Dockerizado.
