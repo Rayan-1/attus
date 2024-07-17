@@ -43,7 +43,7 @@ attus/
 
 # Print 1
 
-*FROM node:lts AS front-build -> Usa a imagem oficial do Node.js na versão LTS como base. A etapa é nomeada front-build.**
+\*FROM node:lts AS front-build -> Usa a imagem oficial do Node.js na versão LTS como base. A etapa é nomeada front-build.**
 WORKDIR /app -> Define o diretório /app como o diretório de trabalho dentro do contêiner.
 COPY package*.json ./ -> Copia os arquivos package.json e package-lock.json (ou yarn.lock, dependendo do gerenciador de pacotes) para o diretório de trabalho.
 RUN npm install -> Executa npm install para instalar todas as dependências listadas no package.json.
