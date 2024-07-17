@@ -61,6 +61,29 @@ attus/
 - **EXPOSE 5000 ->** Informa ao Docker que o contêiner escutará na porta 5000 em tempo de execução.
 - **CMD ["http-server", "-p", "5000"] ->** Define o comando que será executado quando o contêiner iniciar: inicia o http-server na porta 5000.
 
+### Falando um pouco sobre o Dockerfile do Back-End Seguindo a Imagem a baixo:
+ ![image](https://github.com/user-attachments/assets/11f86d33-6494-4ea0-a1f9-3a630f202078)
+
+# Print 1
+
+**FROM maven:3.8.5-openjdk-17 AS build** -> Utiliza a imagem oficial do Maven com o OpenJDK 17 como base. Esta etapa é nomeada como build
+**WORKDIR /app** -> Define o diretório /app como o diretório de trabalho dentro do contêiner.
+**COPY pom.xml ** -> Copia o arquivo pom.xml (arquivo de configuração do Maven) para o diretório de trabalho.
+**RUN mvn dependency:go-offline -B** -> Executa o comando Maven para baixar todas as dependências do projeto, permitindo que a construção do projeto possa ser feita offline.
+**COPY ./src ./src** -> Copia o diretório src (contendo o código-fonte do projeto) para o diretório de trabalho no contêiner
+**RUN mvn clean install -DskipTests** -> Executa o comando Maven para construir o projeto, gerando o arquivo JAR. Os testes são pulados durante este processo (-DskipTests).
+
+# Print 2
+
+**FROM openjdk:17-jdk-slim** -> Utiliza a versão "slim" da imagem OpenJDK 17 como base para a execução, que é menor e mais eficiente.
+**WORKDIR /app** -> Define o diretório /app como o diretório de trabalho dentro do contêiner.
+**COPY --from=build /app/target/back-0.0.1-SNAPSHOT.jar ./back.jar** -> Copia o arquivo JAR gerado na etapa de build (/app/target/back-0.0.1-SNAPSHOT.jar) para o diretório de trabalho na nova imagem (/app), renomeando-o para back.jar.
+**EXPOSE 8080** -> Informa ao Docker que o contêiner irá escutar na porta 8080 em tempo de execução.
+**CMD ["java", "-jar", "back.jar"]** -> Define o comando a ser executado quando o contêiner iniciar: executa o JAR usando o comando java -jar back.jar.
+
+
+
+
 
 
 
