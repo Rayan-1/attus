@@ -1,12 +1,15 @@
-name: Docker Compose Pipeline
+name: Build
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   build-and-deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
 
     services:
@@ -22,7 +25,9 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Install Dependencies
         run: |
@@ -32,7 +37,6 @@ jobs:
           sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
           sudo apt-get update
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io openjdk-17-jdk
-          sudo ln -sf /usr/bin/bash /bin/sh
 
       - name: Install Docker Compose
         run: |
@@ -53,21 +57,16 @@ jobs:
         run: |
           curl -sSf http://localhost:8080 || true
 
-      - name: Download SonarScanner
-        run: |
-          curl -sL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip -o sonar-scanner.zip
-          unzip sonar-scanner.zip
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: SonarCloud Scan
-        shell: /usr/bin/bash -e {0}
+        uses: SonarSource/sonarcloud-github-action@master
         env:
-          SONAR_TOKEN: 76d855da2045b85bb6a8f21828d307dc20a5e4cc
-          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-          PATH: $JAVA_HOME/bin:$PATH
-        run: |
-          ./sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-            -Dsonar.projectKey=Rayan-1_attus \
-            -Dsonar.organization=rayan-1 \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=$SONAR_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
