@@ -24,14 +24,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Docker
+      - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common unzip
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
           sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
           sudo apt-get update
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io openjdk-17-jdk
+          sudo ln -sf /bin/bash /bin/sh
 
       - name: Install Docker Compose
         run: |
@@ -51,15 +52,6 @@ jobs:
       - name: Test connectivity to teste-back service
         run: |
           curl -sSf http://localhost:8080 || true
-
-      - name: Install OpenJDK 17
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openjdk-17-jdk
-
-      - name: Ensure sh is available
-        run: |
-          sudo ln -sf /bin/bash /bin/sh
 
       - name: Download SonarScanner
         run: |
