@@ -44,7 +44,7 @@ jobs:
           docker-compose up --build -d
           sleep 10  # Wait for services to fully start
           docker-compose ps  # List running containers after startup
-          
+
       - name: Test connectivity to teste-front service
         continue-on-error: true
         run: |
@@ -55,14 +55,17 @@ jobs:
         run: |
           curl -sSf http://localhost:8080 || exit 1
 
+      - name: Install OpenJDK 11
+        run: |
+          sudo apt-get install -y openjdk-11-jdk
+
       - name: SonarCloud Scan
         if: always()
         env:
-          SONAR_TOKEN: 8cf35ca0382d6d6f06c69d6586191b2a8de029bb
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          sudo apt-get install openjdk-11-jdk -y
           curl -sL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip -o sonar-scanner.zip
-          unzip sonar-scanner.zip
+          unzip -o sonar-scanner.zip
           export PATH=$PATH:$PWD/sonar-scanner-4.6.2.2472-linux/bin
           sonar-scanner \
             -Dsonar.projectKey=your_project_key \
