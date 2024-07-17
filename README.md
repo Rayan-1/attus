@@ -52,7 +52,7 @@ RUN npm run build -> Executa o comando de build definido no package.json, geralm
 
 # Print 2
 
-/*FROM node:lts-slim -> Usa a versão "slim" da imagem Node.js LTS como base, que é menor e mais eficiente.**
+\*FROM node:lts-slim -> Usa a versão "slim" da imagem Node.js LTS como base, que é menor e mais eficiente.**
 
 *RUN npm install -g http-server -> Instala o http-server globalmente para servir a aplicação estática.**
 
