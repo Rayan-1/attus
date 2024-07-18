@@ -27,7 +27,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be desabilitated for a better relevancy of analysis
+          fetch-depth: 0 
 
       - name: Install Dependencies
         run: |
@@ -46,7 +46,7 @@ jobs:
       - name: Build and Deploy with Docker Compose
         run: |
           docker-compose up --build -d
-          sleep 10  # Wait for services to fully start
+          sleep 10 
           docker-compose ps  # List running containers after startup
 
       - name: Test connectivity to teste-front service
