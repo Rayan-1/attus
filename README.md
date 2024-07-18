@@ -169,9 +169,39 @@ attus/
 
 **Validação da Conexão do Front com o Back garantindo que os containeres estão se comunicando entre si dentro da mesma rede.
 - Usando o exemplo do usuario teste no codigo
-- **Email:** "devopsattus@.com"
+- **Email:** "devops@attus.com"
 - **Senha:** "12136677"
-![image](https://github.com/user-attachments/assets/d08a602b-5e4f-494c-b35c-c6687ee45c1c)
+![image](https://github.com/user-attachments/assets/3e175d73-a927-49d2-803a-f223e4063838)
+
+![image](https://github.com/user-attachments/assets/cdbb1428-efd9-4d9b-ac53-ec6b7b23955b)
+# Login
+![image](https://github.com/user-attachments/assets/63aad1fa-50eb-46b1-be00-1e3264bdaadd)
+![image](https://github.com/user-attachments/assets/f11f4095-f3d6-48a3-b848-c553b48ce10c)
+
+# Mudar Senha
+![image](https://github.com/user-attachments/assets/fa0dd83e-3aa6-4db0-b717-4d8bcfc45032)
+![image](https://github.com/user-attachments/assets/12246df4-accb-4cc1-8657-729f20425a79)
+![image](https://github.com/user-attachments/assets/e049f1d8-19a7-472c-b2da-b15d85dd0e54)
+
+**Validamos que a conexão do Back e Front ta Ok**
+- **Agora iremos parar os containeres com o comando **docker-compose down****
+![image](https://github.com/user-attachments/assets/ce0bf62e-afd9-4bc0-b2aa-9039810746d1)
+- ** Com isso as paginas ficam indisponiveis**
+  ![image](https://github.com/user-attachments/assets/cf59296b-12b4-403d-b466-40c6f5ba6866)
+  ![image](https://github.com/user-attachments/assets/2fcc11ec-d832-4583-a5d7-9b57c08bb930)
+  ![image](https://github.com/user-attachments/assets/7beaba98-d3dc-463b-8c54-f5f7e295a9d7)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
