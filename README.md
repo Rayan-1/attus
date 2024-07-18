@@ -4,7 +4,8 @@ Neste desafio, o objetivo é dockerizar uma aplicação que inclui funcionalidad
 
 # Estrutura dos Diretorios
 
-![image](https://github.com/user-attachments/assets/46bc1506-20d0-4d89-a913-956d35158974)
+![image](https://github.com/user-attachments/assets/c52d7cd0-b63f-4b84-bccf-7c84c7efe684)
+
 
         
 ![image](https://github.com/user-attachments/assets/dbf650dd-0022-47ec-a55e-687096e92a30)
