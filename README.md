@@ -50,60 +50,74 @@ Neste desafio, o objetivo é dockerizar uma aplicação que inclui funcionalidad
 
 # Print 1
 
-**FROM maven:3.8.5-openjdk-17 AS build** -> Utiliza a imagem oficial do Maven com o OpenJDK 17 como base. Esta etapa é nomeada como build
+- **FROM maven:3.8.5-openjdk-17 AS build** -> Utiliza a imagem oficial do Maven com o OpenJDK 17 como base. Esta etapa é nomeada como build
 
-**WORKDIR /app** -> Define o diretório /app como o diretório de trabalho dentro do contêiner.
+- **WORKDIR /app** -> Define o diretório /app como o diretório de trabalho dentro do contêiner.
 
-**COPY pom.xml ** -> Copia o arquivo pom.xml (arquivo de configuração do Maven) para o diretório de trabalho.
+- **COPY pom.xml ** -> Copia o arquivo pom.xml (arquivo de configuração do Maven) para o diretório de trabalho.
 
-**RUN mvn dependency:go-offline -B** -> Executa o comando Maven para baixar todas as dependências do projeto, permitindo que a construção do projeto possa ser feita offline.
+- **RUN mvn dependency:go-offline -B** -> Executa o comando Maven para baixar todas as dependências do projeto, permitindo que a construção do projeto possa ser feita offline.
 
-**COPY ./src ./src** -> Copia o diretório src (contendo o código-fonte do projeto) para o diretório de trabalho no contêiner
+- **COPY ./src ./src** -> Copia o diretório src (contendo o código-fonte do projeto) para o diretório de trabalho no contêiner
 
-**RUN mvn clean install -DskipTests** -> Executa o comando Maven para construir o projeto, gerando o arquivo JAR. Os testes são pulados durante este processo (-DskipTests).
+- **RUN mvn clean install -DskipTests** -> Executa o comando Maven para construir o projeto, gerando o arquivo JAR. Os testes são pulados durante este processo (-DskipTests).
 
 # Print 2
 
-**FROM openjdk:17-jdk-slim** -> Utiliza a versão "slim" da imagem OpenJDK 17 como base para a execução, que é menor e mais eficiente.
+- **FROM openjdk:17-jdk-slim** -> Utiliza a versão "slim" da imagem OpenJDK 17 como base para a execução, que é menor e mais eficiente.
 
-**WORKDIR /app** -> Define o diretório /app como o diretório de trabalho dentro do contêiner.
+- **WORKDIR /app** -> Define o diretório /app como o diretório de trabalho dentro do contêiner.
 
-**COPY --from=build /app/target/back-0.0.1-SNAPSHOT.jar ./back.jar** -> Copia o arquivo JAR gerado na etapa de build (/app/target/back-0.0.1-SNAPSHOT.jar) para o diretório de trabalho na nova imagem (/app), renomeando-o para back.jar.
+- **COPY --from=build /app/target/back-0.0.1-SNAPSHOT.jar ./back.jar** -> Copia o arquivo JAR gerado na etapa de build (/app/target/back-0.0.1-SNAPSHOT.jar) para o diretório de trabalho na nova imagem (/app), renomeando-o para back.jar.
 
-**EXPOSE 8080** -> Informa ao Docker que o contêiner irá escutar na porta 8080 em tempo de execução.
+- **EXPOSE 8080** -> Informa ao Docker que o contêiner irá escutar na porta 8080 em tempo de execução.
 
-**CMD ["java", "-jar", "back.jar"]** -> Define o comando a ser executado quando o contêiner iniciar: executa o JAR usando o comando java -jar back.jar.
+- **CMD ["java", "-jar", "back.jar"]** -> Define o comando a ser executado quando o contêiner iniciar: executa o JAR usando o comando java -jar back.jar.
 
 
 ## Falando um pouco sobre o Docker Compose Seguindo as Imagens abaixo
 # Front
 ![image](https://github.com/user-attachments/assets/f0343df2-5676-498d-9b36-cbe84cdcc475)
 
-**container_name** -> Define o nome do contêiner como teste-front.
-**build** -> Especifica o diretório (./teste-front) onde o Dockerfile do frontend está localizado.
-**ports** -> Mapeia a porta 5000 do contêiner para a porta 5000 do host.
-**environment** -> Define a variável de ambiente NODE_ENV como production.
-**networks** -> Conecta o serviço à rede front.
-**depends_on** -> Define que o serviço front depende do serviço back, ou seja, back será iniciado antes de front.
+- **container_name** -> Define o nome do contêiner como teste-front.
+
+- **build** -> Especifica o diretório (./teste-front) onde o Dockerfile do frontend está localizado.
+
+- **ports** -> Mapeia a porta 5000 do contêiner para a porta 5000 do host.
+
+- **environment** -> Define a variável de ambiente NODE_ENV como production.
+
+- **networks** -> Conecta o serviço à rede front.
+
+- **depends_on** -> Define que o serviço front depende do serviço back, ou seja, back será iniciado antes de front.
 
 # Back
 ![image](https://github.com/user-attachments/assets/3414658b-a31f-4d04-96de-d384d36e8e0b)
 
-**container_name** -> Define o nome do contêiner como teste-back.
-**build** -> Especifica o diretório (./teste-back) onde o Dockerfile do backend está localizado.
-**ports:** -> Mapeia a porta 8080 do contêiner para a porta 8080 do host.
-**environment:** -> Define variáveis de ambiente para configurar a conexão com o banco de dados PostgreSQL.
-**networks** -> Conecta o serviço às redes front e db.
-**depends_on** -> Define que o serviço back depende do serviço postgres, ou seja, postgres será iniciado antes de back.
+- **container_name** -> Define o nome do contêiner como teste-back.
+
+- **build** -> Especifica o diretório (./teste-back) onde o Dockerfile do backend está localizado.
+
+- **ports:** -> Mapeia a porta 8080 do contêiner para a porta 8080 do host.
+
+- **environment:** -> Define variáveis de ambiente para configurar a conexão com o banco de dados PostgreSQL.
+
+- **networks** -> Conecta o serviço às redes front e db.
+
+- **depends_on** -> Define que o serviço back depende do serviço postgres, ou seja, postgres será iniciado antes de back.
 
 # Postgres
 ![image](https://github.com/user-attachments/assets/d751a476-5519-4af7-87e9-9afa129c5e1d)
 
-**image** -> Utiliza a imagem oficial do PostgreSQL na versão 13.
-**environment** -> Define variáveis de ambiente para configurar o banco de dados PostgreSQL.
-**ports** -> Mapeia a porta 5432 do contêiner para a porta 5432 do host.
-**volumes** -> Monta o volume postgres-data para persistir os dados do PostgreSQL.
-**networks** -> Conecta o serviço à rede db.
+- **image** -> Utiliza a imagem oficial do PostgreSQL na versão 13.
+
+- **environment** -> Define variáveis de ambiente para configurar o banco de dados PostgreSQL.
+
+- **ports** -> Mapeia a porta 5432 do contêiner para a porta 5432 do host.
+
+-  **volumes** -> Monta o volume postgres-data para persistir os dados do PostgreSQL.
+
+- **networks** -> Conecta o serviço à rede db.
 
 # Redes
 ![image](https://github.com/user-attachments/assets/83df1f2b-5352-4198-8eac-9af4bf150b34)
