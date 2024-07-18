@@ -181,7 +181,8 @@ Neste desafio, o objetivo é dockerizar uma aplicação que inclui funcionalidad
 
 # Pipeline CI/CD
 
-![image](https://github.com/user-attachments/assets/a60c8f2b-2bac-4d95-88a1-90779542d043)
+![image](https://github.com/user-attachments/assets/701df6ed-feb2-42ac-b261-0db0dac4e525)
+
 
 # Trigger: O pipeline é acionado em push para a branch main e em pull requests abertos, sincronizados ou reabertos.
 
