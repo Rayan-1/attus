@@ -4,34 +4,8 @@ Neste desafio, o objetivo é dockerizar uma aplicação que inclui funcionalidad
 
 # Estrutura dos Diretorios
 
-attus/
-├── teste-back/
-│   ├── Dockerfile
-│   ├── HELP.md
-│   ├── mvnw
-│   ├── mvnw.cmd
-│   ├── out/
-│   ├── pom.xml
-│   └── src/
-│       ├── main/
-│       │   ├── java/
-│       │   └── resources/
-│       └── test/
-└── teste-front/
-    ├── Dockerfile
-    ├── README.md
-    ├── babel.config.js
-    ├── jsconfig.json
-    ├── node_modules/
-    ├── package-lock.json
-    ├── package.json
-    ├── public/
-    └── src/
-        ├── assets/
-        ├── components/
-        ├── views/
-        ├── App.vue
-        └── main.js
+![image](https://github.com/user-attachments/assets/46bc1506-20d0-4d89-a913-956d35158974)
+
         
 ![image](https://github.com/user-attachments/assets/dbf650dd-0022-47ec-a55e-687096e92a30)
 
