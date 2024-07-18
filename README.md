@@ -212,6 +212,8 @@ Neste desafio, o objetivo é dockerizar uma aplicação que inclui funcionalidad
 - Validando pelo Site do Sonar para validar se os resultados Batem
 - ![image](https://github.com/user-attachments/assets/69f80f86-af43-482f-999d-45dd48e9adaf)
 - ![image](https://github.com/user-attachments/assets/1536de2c-c5e2-4961-82db-36297a46224a)
+- ![image](https://github.com/user-attachments/assets/cd84d500-acb3-4bb7-9722-23e87c4288d7)
+
 
 
 
