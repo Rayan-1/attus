@@ -165,10 +165,38 @@ Neste desafio, o objetivo é dockerizar uma aplicação que inclui funcionalidad
   ![image](https://github.com/user-attachments/assets/2fcc11ec-d832-4583-a5d7-9b57c08bb930)
   ![image](https://github.com/user-attachments/assets/7beaba98-d3dc-463b-8c54-f5f7e295a9d7)
 
+# Pipeline CI/CD
 
+![image](https://github.com/user-attachments/assets/a60c8f2b-2bac-4d95-88a1-90779542d043)
 
+# Trigger: O pipeline é acionado em push para a branch main e em pull requests abertos, sincronizados ou reabertos.
 
+- **Job 'build-and-deploy':**
 
+- Configura um serviço PostgreSQL.
+- Realiza o checkout do repositório e instala dependências como Docker, Docker Compose e JDK 17.
+- Constrói e implanta serviços usando Docker Compose.
+- Testa a conectividade com os serviços teste-front e teste-back.
+  
+- **Job 'sonarcloud':**
+
+- Realiza o checkout completo do repositório.
+- Configura o ambiente Java com JDK 17.
+- Configura e instala o SonarScanner para análise estática.
+- Executa o SonarScanner para análise de código.
+- Este pipeline automatiza a construção, implantação e análise estática de código em um ambiente de desenvolvimento e integração contínua.
+
+- Instala todas as dependencias e executa os containeres faz um teste d conexão 
+![image](https://github.com/user-attachments/assets/94b18880-8f98-465e-af2d-5a2fb20ebdee)
+
+- Faz a inspenção continua para fazer analise no codigo (code small)
+  ![image](https://github.com/user-attachments/assets/71b0b162-9e48-4b58-a9dc-bda02ddc8b82)
+- Resultados da Analise
+  ![image](https://github.com/user-attachments/assets/1a7301c9-0a3b-4470-a4d8-bb62a3f4e3a6)
+
+- Validando pelo Site do Sonar para validar se os resultados Batem
+- ![image](https://github.com/user-attachments/assets/69f80f86-af43-482f-999d-45dd48e9adaf)
+- ![image](https://github.com/user-attachments/assets/1536de2c-c5e2-4961-82db-36297a46224a)
 
 
 
